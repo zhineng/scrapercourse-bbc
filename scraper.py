@@ -19,4 +19,18 @@ tiltes = soup.find_all(
 title_list = []
 for title in tiltes:
     title_list.append(title.getText())
-print(title_list)
+# print(title_list)
+
+
+urls = soup.find_all(
+    'a', {'class': 'qa-heading-link lx-stream-post__header-link'})
+tags_list = []
+for url in urls:
+    #print('https://www.bbc.com' + url.get('href'))
+    sub_response = requests.get('https://www.bbc.com' + url.get('href'))
+    sub_soup = BeautifulSoup(sub_response.text, 'lxml')
+    tags = sub_soup.find_all('li', {'class': 'bbc-1msyfg1 e1hq59l0'})
+    for tag in tags:
+        tags_list.append(tag.find('a').getText())
+
+print(tags_list)
